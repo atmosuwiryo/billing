@@ -7,9 +7,11 @@ import { PaketModule } from './paket/paket.module';
 import { ProdukModule } from './produk/produk.module';
 import { LanggananModule } from './langganan/langganan.module';
 import { TagihanModule } from './tagihan/tagihan.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     PaketModule,
     ProdukModule,
