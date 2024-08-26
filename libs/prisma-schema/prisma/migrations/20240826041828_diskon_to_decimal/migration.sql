@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Produk" ALTER COLUMN "diskon" SET DEFAULT 0,
+ALTER COLUMN "diskon" SET DATA TYPE DECIMAL(18,2);

@@ -51,7 +51,7 @@ model Profile {
   noWA          String
   paket         String
   tglAktif      DateTime
-  tglExp        DateTime
+  tglExp        DateTime?
   payment       String
 
   user   User   @relation(fields: [userId], references: [id])
@@ -77,7 +77,7 @@ model Produk {
   updatedAt DateTime @updatedAt
 
   nama              String
-  diskon            Int               @default(0)
+  diskon            Decimal           @default(0) @db.Decimal(18, 2)
   jenisDiskon       JenisDiskon       @default(NOMINAL)
   lamaWaktuDiskon   Int               @default(0)
   satuanWaktuDiskon SatuanWaktuDiskon @default(TAHUN)
@@ -113,6 +113,12 @@ model Tagihan {
 
   langganan   Langganan @relation(fields: [langgananId], references: [id])
   langgananId String
+
+  nominal       Decimal  @default(0) @db.Decimal(18, 2)
+  diskon        Decimal  @default(0) @db.Decimal(18, 2)
+  pajak         Decimal  @default(0) @db.Decimal(18, 2)
+  total         Decimal  @default(0) @db.Decimal(18, 2)
+  tglPembayaran DateTime?
 
   tglMulai   DateTime
   tglSelesai DateTime
