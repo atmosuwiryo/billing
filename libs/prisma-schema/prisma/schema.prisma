@@ -25,6 +25,13 @@ enum StatusLangganan {
   DISMANTLE
 }
 
+enum StatusTagihan {
+  AKTIF
+  TERBAYAR
+  MASA_TENGGANG
+  KADALUARSA
+}
+
 model User {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -49,10 +56,8 @@ model Profile {
   noRegistrasi  String   @unique
   alamat        String
   noWA          String
-  paket         String
   tglAktif      DateTime
   tglExp        DateTime?
-  payment       String
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
@@ -101,7 +106,7 @@ model Langganan {
   produkId   String
   tglMulai   DateTime
   tglSelesai DateTime
-  status     Boolean  @default(false)
+  status     StatusLangganan @default(AKTIF)
 
   tagihan Tagihan[]
 }
@@ -122,5 +127,5 @@ model Tagihan {
 
   tglMulai   DateTime
   tglSelesai DateTime
-  status     Boolean  @default(false)
+  status     StatusTagihan @default(AKTIF)
 }
