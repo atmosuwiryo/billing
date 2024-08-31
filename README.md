@@ -1,5 +1,24 @@
 # CnBilling
 
+## Run Infra
+
+```sh
+cd infra
+docker compose up -d
+```
+
+
+## Run API
+
+`pnpx nx serve api`
+
+## Run Frontend
+
+`pnpx nx serve frontend`
+
+## Seeding
+`pnpx nx prisma-seed libs-prisma-schema`
+
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
