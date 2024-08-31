@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class PaginationResponseEntity<T> {
+export class PaginationResponseEntity {
   /**
    * @description
    * The count of the data.
@@ -35,5 +35,4 @@ export class PaginationResponseEntity<T> {
   })
     previous: string | null;
 
-  results: T[];
 }

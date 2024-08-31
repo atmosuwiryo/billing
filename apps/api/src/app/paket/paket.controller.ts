@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PaketService } from './paket.service';
 import { CreatePaketDto } from './dto/create-paket.dto';
 import { UpdatePaketDto } from './dto/update-paket.dto';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { PaketEntity } from './entities/paket.entity';
+import { RequestPaketDto } from './dto/request-paket.dto';
+import { ResponsePaketEntity } from './entities/response-paket.entity';
 
 @ApiTags('paket')
 @Controller('paket')
@@ -37,11 +40,12 @@ export class PaketController {
   })
   @ApiOkResponse({
     description: 'Successfully retrieved list of packages.',
-    type: [PaketEntity], // Indicates an array of PaketEntity
+    type: ResponsePaketEntity,
   })
   @Get()
-  findAll() {
-    return this.paketService.findAll();
+  findAll(@Query() query?: RequestPaketDto) {
+    const { page, take, ...filter } = query;
+    return this.paketService.findAll(page, take, filter);
   }
 
   @ApiOperation({

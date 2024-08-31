@@ -5,6 +5,7 @@ import { PrismaService } from '../../services/prisma.service';
 import { PaginationService } from '../../services/pagination.service';
 import { UserEntity } from './entities/user.entity';
 import { OrderBy } from './dto/request-user.dto';
+import { ResponseUserEntity } from './entities/response-user.entity';
 
 @Injectable()
 export class UserService {
@@ -34,7 +35,7 @@ export class UserService {
         query['where'] = {
           OR: [
             { username: { contains: filter['search'], mode: 'insensitive' } },
-            { email: { name: { contains: filter['search'], mode: 'insensitive' } } },
+            { email: { contains: filter['search'], mode: 'insensitive' } },
           ]
         };
       }
@@ -82,11 +83,12 @@ export class UserService {
       prismaQuery, this.prisma.user.count({ where: query.where }),
     ]);
 
-    const users = results.map(employee => {
-      return new UserEntity(employee);
+    const users = results.map(user => {
+      return new UserEntity(user);
     });
 
-    return this.paginationService.paginate(count, take, users);
+    const paginatedResult: ResponseUserEntity = await this.paginationService.paginate(count, take, users);
+    return paginatedResult;
 
   }
 

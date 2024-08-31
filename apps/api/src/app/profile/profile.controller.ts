@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProfileEntity } from './entities/profile.entity';
+import { ResponseProfileEntity } from './entities/response-profile.entity';
+import { RequestProfileDto } from './dto/request-profile.dto';
 
 @ApiTags('profile')
 @Controller('profile')
@@ -35,13 +38,14 @@ export class ProfileController {
     description: 'Endpoint for retrieving all profiles',
     summary: 'Retrieve all profiles',
   })
-  @ApiCreatedResponse({
+  @ApiOkResponse({
     description: 'Successfully retrieved list of profiles.',
-    type: [ProfileEntity], // Indicates an array of ProfileEntity
+    type: ResponseProfileEntity,
   })
   @Get()
-  findAll() {
-    return this.profileService.findAll();
+  findAll(@Query() query?: RequestProfileDto) {
+    const { page, take, ...filter } = query;
+    return this.profileService.findAll(page, take, filter);
   }
 
   @ApiOperation({

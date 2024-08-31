@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Paket } from '@prisma/client';
-import { Decimal } from '@prisma/client/runtime/library';
+import { Paket, Prisma } from '@prisma/client';
+import { Transform } from 'class-transformer';
 
 export class PaketEntity implements Paket {
   /**
@@ -52,7 +52,8 @@ export class PaketEntity implements Paket {
     example: '199.99',
     type: 'string', // Documenting Decimal as a string in Swagger.
   })
-  harga: Decimal;
+  @Transform(( { value }) => value.toFixed(2))
+  harga: Prisma.Decimal;
 
   /**
    * @description
