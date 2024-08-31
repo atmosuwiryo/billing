@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "@prisma/client";
 import { Omit } from "@prisma/client/runtime/library";
+import { Exclude } from "class-transformer";
 
 export class UserEntity implements Omit<User, 'password'> {
   /**
@@ -35,16 +36,6 @@ export class UserEntity implements Omit<User, 'password'> {
 
   /**
    * @description
-   * The full name of the user.
-   */
-  @ApiProperty({
-    description: 'The full name of the user.',
-    example: 'John Doe',
-  })
-  name: string;
-
-  /**
-   * @description
    * The username of the user.
    */
   @ApiProperty({
@@ -72,6 +63,9 @@ export class UserEntity implements Omit<User, 'password'> {
     example: true,
   })
   isAdmin: boolean;
+
+  @Exclude()
+  password: string;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

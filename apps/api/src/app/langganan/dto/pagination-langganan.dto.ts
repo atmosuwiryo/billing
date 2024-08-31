@@ -1,4 +1,4 @@
-import { PaginationRequestDto } from "./pagination.dto";
+import { PaginationRequestDto } from "../../../shared/dto/pagination-request.dto";
 
 export class PaginationLangganan extends PaginationRequestDto {
 }

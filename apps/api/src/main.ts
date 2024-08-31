@@ -1,5 +1,5 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 import { swaggerConfig } from './config/swagger.config';
@@ -10,6 +10,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { PrismaClientExceptionFilter } from './shared/filters/prisma-client-exception.filter';
 
 async function bootstrap() {
   // Use fastify instead of express
@@ -43,6 +44,14 @@ async function bootstrap() {
     Logger.log(`Swagger is running on ${host}:${port}/${swaggerPath}`);
     SwaggerModule.setup(swaggerPath, app, document);
   }
+
+  // PrismaClient Exception Filter
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+
+  // Class Serializer Interceptor
+  // for @Exclude()
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(port);
   Logger.log(

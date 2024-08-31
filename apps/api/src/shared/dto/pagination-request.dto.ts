@@ -33,7 +33,6 @@ export class PaginationRequestDto {
 
   @ApiProperty({
     description: 'Search query',
-    type: String,
     example: 'Search text',
   })
   @ApiPropertyOptional()

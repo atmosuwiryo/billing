@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Profile } from "@prisma/client";
-import { IsAlphanumeric, IsDateString, IsMobilePhone, IsNumberString, IsString } from "class-validator";
+import { IsAlphanumeric, IsDateString, IsMobilePhone, IsNumberString, IsOptional, IsString } from "class-validator";
 
 export class CreateProfileDto implements Omit<Profile, 'id' | 'createdAt' | 'updatedAt'> {
   /**
@@ -78,6 +78,7 @@ export class CreateProfileDto implements Omit<Profile, 'id' | 'createdAt' | 'upd
     example: '2022-01-01T00:00:00.000Z',
   })
   @IsDateString()
+  @IsOptional()
   tglExp: Date | null;
 
   /**

@@ -6,12 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCreatedResponse, ApiOperation, ApiTags, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { RequestUserDto } from './dto/request-user.dto';
+import { PaginationResponseEntity } from '../../shared/entities/pagination-response.entity';
+import { ResponseUserEntity } from './entities/response-user.entity';
 
 @ApiTags('user')
 @Controller('user')
@@ -37,11 +41,12 @@ export class UserController {
   })
   @ApiOkResponse({
     description: 'Successfully retrieved list of users.',
-    type: [UserEntity], // Indicates an array of UserEntity
+    type: ResponseUserEntity(UserEntity),
   })
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Query() query?: RequestUserDto) {
+    const { page, take, ...filter } = query;
+    return this.userService.findAll(page, take, filter);
   }
 
   @ApiOperation({

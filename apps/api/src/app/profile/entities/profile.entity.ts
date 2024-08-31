@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Profile } from "@prisma/client";
+import { IsOptional } from "class-validator";
 
 export class ProfileEntity implements Profile {
   /**
@@ -100,6 +101,7 @@ export class ProfileEntity implements Profile {
     description: 'The expiration date of the profile.',
     example: '2022-01-01T00:00:00.000Z',
   })
+  @IsOptional()
   tglExp: Date | null;
 
   /**

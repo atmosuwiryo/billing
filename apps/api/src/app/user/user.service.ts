@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../../services/prisma.service';
 import { PaginationService } from '../../services/pagination.service';
 import { UserEntity } from './entities/user.entity';
+import { OrderBy } from './dto/request-user.dto';
 
 @Injectable()
 export class UserService {
@@ -19,8 +20,74 @@ export class UserService {
     return new UserEntity(user);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(page=1, take=20, filter) {
+    const skip = (page - 1) * take;
+
+    const query = {
+      skip,
+      take,
+      where: {}
+    };
+
+    if (Object.keys(filter).length > 0) {
+      if ('search'in filter) {
+        query['where'] = {
+          OR: [
+            { username: { contains: filter['search'], mode: 'insensitive' } },
+            { email: { name: { contains: filter['search'], mode: 'insensitive' } } },
+          ]
+        };
+      }
+
+      if ('orderBy' in filter) {
+
+        let orderDirection = 'asc';  // init default order direction
+        if ('orderDirection' in filter) {
+          orderDirection = filter['orderDirection'];
+        }
+
+        if (filter['orderBy'] in OrderBy) {  // Check if filter is valid
+          query['orderBy'] = { [filter['orderBy']]: { name: orderDirection } };
+        } else {
+          query['orderBy'] = { [filter['orderBy']]: orderDirection };
+        }
+
+      } else {
+        query['orderBy'] = { createdAt: 'desc' };
+      }
+
+      const queryFilter = [];
+      let isQueryFilter = false;
+
+      if ('username' in filter) {
+        isQueryFilter = true;
+        queryFilter.push({ username: { contains: filter['username'], mode: 'insensitive' } });
+      }
+
+      if ('email' in filter) {
+        isQueryFilter = true;
+        queryFilter.push({ email: { contains: filter['email'], mode: 'insensitive' } });
+      }
+
+
+      if (isQueryFilter) {
+        query['where'] = { AND: queryFilter };
+      }
+
+    }
+
+    const prismaQuery = this.prisma.user.findMany(query);
+
+    const [results, count] = await this.prisma.$transaction([
+      prismaQuery, this.prisma.user.count({ where: query.where }),
+    ]);
+
+    const users = results.map(employee => {
+      return new UserEntity(employee);
+    });
+
+    return this.paginationService.paginate(count, take, users);
+
   }
 
   async findOne(id: string) {
