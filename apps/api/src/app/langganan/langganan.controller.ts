@@ -58,7 +58,7 @@ export class LanggananController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.langgananService.findOne(+id);
+    return this.langgananService.findOne(id);
   }
 
   @ApiOperation({
@@ -78,7 +78,7 @@ export class LanggananController {
     @Param('id') id: string,
     @Body() updateLanggananDto: UpdateLanggananDto
   ) {
-    return this.langgananService.update(+id, updateLanggananDto);
+    return this.langgananService.update(id, updateLanggananDto);
   }
 
   @ApiOperation({
@@ -94,6 +94,6 @@ export class LanggananController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.langgananService.remove(+id);
+    return this.langgananService.remove(id);
   }
 }

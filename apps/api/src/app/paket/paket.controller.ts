@@ -58,7 +58,7 @@ export class PaketController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.paketService.findOne(+id);
+    return this.paketService.findOne(id);
   }
 
   @ApiOperation({
@@ -75,7 +75,7 @@ export class PaketController {
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePaketDto: UpdatePaketDto) {
-    return this.paketService.update(+id, updatePaketDto);
+    return this.paketService.update(id, updatePaketDto);
   }
 
   @ApiOperation({
@@ -91,6 +91,6 @@ export class PaketController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.paketService.remove(+id);
+    return this.paketService.remove(id);
   }
 }

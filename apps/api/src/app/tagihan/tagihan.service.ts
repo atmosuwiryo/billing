@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTagihanDto } from './dto/create-tagihan.dto';
 import { UpdateTagihanDto } from './dto/update-tagihan.dto';
+import { PrismaService } from '../../services/prisma.service';
+import { TagihanEntity } from './entities/tagihan.entity';
 
 @Injectable()
 export class TagihanService {
-  create(createTagihanDto: CreateTagihanDto) {
-    return 'This action adds a new tagihan';
+  constructor(
+    private prisma: PrismaService
+  ) {}
+  async create(createTagihanDto: CreateTagihanDto) {
+    const tagihan = await this.prisma.tagihan.create({
+      data: createTagihanDto
+    })
+    return new TagihanEntity(tagihan);
   }
 
   findAll() {
     return `This action returns all tagihan`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tagihan`;
+  async findOne(id: string) {
+    const tagihan = await this.prisma.tagihan.findUniqueOrThrow({
+      where: { id },
+    });
+    return new TagihanEntity(tagihan);
   }
 
-  update(id: number, updateTagihanDto: UpdateTagihanDto) {
-    return `This action updates a #${id} tagihan`;
+  async update(id: string, updateTagihanDto: UpdateTagihanDto) {
+    const tagihan = await this.prisma.tagihan.update({
+      where: { id },
+      data: updateTagihanDto
+    });
+    return new TagihanEntity(tagihan);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tagihan`;
+  async remove(id: string) {
+    const tagihan = await this.prisma.tagihan.delete({
+      where: { id },
+    });
+    return new TagihanEntity(tagihan);
   }
 }

@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePaketDto } from './dto/create-paket.dto';
 import { UpdatePaketDto } from './dto/update-paket.dto';
+import { PrismaService } from '../../services/prisma.service';
+import { PaketEntity } from './entities/paket.entity';
 
 @Injectable()
 export class PaketService {
-  create(createPaketDto: CreatePaketDto) {
-    return 'This action adds a new paket';
+  constructor(
+    private prisma: PrismaService
+  ) {}
+  async create(createPaketDto: CreatePaketDto) {
+    const paket = await this.prisma.paket.create({
+      data: createPaketDto,
+    });
+    return new PaketEntity(paket);
   }
 
   findAll() {
     return `This action returns all paket`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} paket`;
+  async findOne(id: string) {
+    const paket = await this.prisma.paket.findUniqueOrThrow({
+      where: { id },
+    });
+    return new PaketEntity(paket);
   }
 
-  update(id: number, updatePaketDto: UpdatePaketDto) {
-    return `This action updates a #${id} paket`;
+  async update(id: string, updatePaketDto: UpdatePaketDto) {
+    const paket = await this.prisma.paket.update({
+      where: { id },
+      data: updatePaketDto,
+    });
+    return new PaketEntity(paket);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} paket`;
+  async remove(id: string) {
+    const paket = await this.prisma.paket.delete({
+      where: { id },
+    });
+    return new PaketEntity(paket);
   }
 }

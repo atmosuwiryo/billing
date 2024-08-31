@@ -58,7 +58,7 @@ export class ProdukController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.produkService.findOne(+id);
+    return this.produkService.findOne(id);
   }
 
   @ApiOperation({
@@ -75,7 +75,7 @@ export class ProdukController {
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProdukDto: UpdateProdukDto) {
-    return this.produkService.update(+id, updateProdukDto);
+    return this.produkService.update(id, updateProdukDto);
   }
 
   @ApiOperation({
@@ -91,6 +91,6 @@ export class ProdukController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.produkService.remove(+id);
+    return this.produkService.remove(id);
   }
 }

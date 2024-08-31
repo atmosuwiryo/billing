@@ -58,7 +58,7 @@ export class TagihanController {
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tagihanService.findOne(+id);
+    return this.tagihanService.findOne(id);
   }
 
   @ApiOperation({
@@ -75,7 +75,7 @@ export class TagihanController {
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTagihanDto: UpdateTagihanDto) {
-    return this.tagihanService.update(+id, updateTagihanDto);
+    return this.tagihanService.update(id, updateTagihanDto);
   }
 
   @ApiOperation({
@@ -91,6 +91,6 @@ export class TagihanController {
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.tagihanService.remove(+id);
+    return this.tagihanService.remove(id);
   }
 }

@@ -73,7 +73,7 @@ export class UserEntity implements Omit<User, 'password'> {
   })
   isAdmin: boolean;
 
-  constructor(partial: Partial<UserEntity>) {
+  constructor(partial: Partial<User>) {
     Object.assign(this, partial);
   }
 }
