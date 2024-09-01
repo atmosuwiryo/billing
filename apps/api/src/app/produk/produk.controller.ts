@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ProdukService } from './produk.service';
 import { CreateProdukDto } from './dto/create-produk.dto';
 import { UpdateProdukDto } from './dto/update-produk.dto';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { ProdukEntity } from './entities/produk.entity';
+import { RequestProdukDto } from './dto/request-produk.dto';
+import { ResponseProdukEntity } from './entities/response-produk.entity';
 
 @ApiTags('produk')
 @Controller('produk')
@@ -37,11 +40,12 @@ export class ProdukController {
   })
   @ApiOkResponse({
     description: 'Successfully retrieved list of products.',
-    type: [ProdukEntity], // Indicates an array of ProdukEntity
+    type: ResponseProdukEntity,
   })
   @Get()
-  findAll() {
-    return this.produkService.findAll();
+  findAll(@Query() query?: RequestProdukDto) {
+    const { page, take, ...filter } = query;
+    return this.produkService.findAll(page, take, filter);
   }
 
   @ApiOperation({
