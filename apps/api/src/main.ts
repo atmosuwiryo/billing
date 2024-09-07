@@ -28,7 +28,7 @@ async function bootstrap() {
   const port = config.get('API_PORT') || 3000;
   const swaggerPath = config.get('API_SWAGGER_PATH') || 'api-docs';
   const isSwaggerEnabled = config.get('API_SWAGGER_ENABLED') || false;
-  const node_env = config.get('NODE_ENV') || 'development';
+  // const node_env = config.get('NODE_ENV') || 'development';
 
   // Auto validation at the application level
   app.useGlobalPipes(

@@ -5,7 +5,6 @@ import { PrismaService } from '../../services/prisma.service';
 import { ProdukEntity } from './entities/produk.entity';
 import { ResponseProdukEntity } from './entities/response-produk.entity';
 import { PaginationService } from '../../services/pagination.service';
-import { OrderBy } from './dto/request-produk.dto';
 
 @Injectable()
 export class ProdukService {
@@ -14,8 +13,7 @@ export class ProdukService {
     private paginationService: PaginationService<ProdukEntity>
   ) {}
   async create(createProdukDto: CreateProdukDto) {
-    const produk = await this.prisma.produk.create({
-      data: createProdukDto,
+    const produk = await this.prisma.produk.create({ data: createProdukDto,
     });
     return new ProdukEntity(produk);
   }
@@ -26,7 +24,10 @@ export class ProdukService {
     const query = {
       skip,
       take,
-      where: {}
+      where: {},
+      include: {
+        paket: true
+      }
     };
 
     if (Object.keys(filter).length > 0) {
@@ -45,11 +46,7 @@ export class ProdukService {
           orderDirection = filter['orderDirection'];
         }
 
-        if (filter['orderBy'] in OrderBy) {  // Check if filter is valid
-          query['orderBy'] = { [filter['orderBy']]: { name: orderDirection } };
-        } else {
-          query['orderBy'] = { [filter['orderBy']]: orderDirection };
-        }
+        query['orderBy'] = { [filter['orderBy']]: orderDirection };
 
       } else {
         query['orderBy'] = { createdAt: 'desc' };

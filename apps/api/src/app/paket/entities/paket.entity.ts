@@ -75,7 +75,7 @@ export class PaketEntity implements Paket {
   })
   isActive: boolean;
 
-  constructor(paket: Partial<PaketEntity>) {
+  constructor(paket: Partial<Paket>) {
     Object.assign(this, paket);
   }
 }

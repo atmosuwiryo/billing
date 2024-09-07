@@ -1,5 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Langganan, StatusLangganan } from "@prisma/client";
+import { Transform } from "class-transformer";
+import { ProdukEntity } from "../../produk/entities/produk.entity";
+import { UserProfileEntity } from "../../user/entities/user-profile.entity";
 
 export class LanggananEntity implements Langganan {
   /**
@@ -83,7 +86,28 @@ export class LanggananEntity implements Langganan {
   })
   status: StatusLangganan;
 
-  constructor(langganan: Partial<LanggananEntity>) {
+  /**
+   * @description
+   * The user of the subscription.
+   */
+  @ApiProperty({
+    description: 'The user of the subscription.',
+    type: () => UserProfileEntity
+  })
+  @Transform(({ value }) => value ? new UserProfileEntity(value) : null)
+  user: UserProfileEntity;
+
+  /**
+   * @description
+   * The product of the subscription.
+   */
+  @ApiProperty({
+    description: 'The product of the subscription.',
+  })
+  @Transform(({ value }) => value ? new ProdukEntity(value) : null)
+  produk: ProdukEntity;
+
+  constructor(langganan: Partial<Langganan>) {
     Object.assign(this, langganan);
   }
 }

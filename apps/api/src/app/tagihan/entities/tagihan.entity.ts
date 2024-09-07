@@ -128,7 +128,7 @@ export class TagihanEntity implements Tagihan {
   })
   status: StatusTagihan;
 
-  constructor(partial: Partial<TagihanEntity>) {
+  constructor(partial: Partial<Tagihan>) {
     Object.assign(this, partial);
   }
 }

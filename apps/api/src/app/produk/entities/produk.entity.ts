@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { JenisDiskon, Produk, SatuanWaktuDiskon } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
-import { Transform } from "class-transformer";
+import { Exclude, Transform } from "class-transformer";
+import { PaketEntity } from "../../paket/entities/paket.entity";
 
 export class ProdukEntity implements Produk {
   /**
@@ -108,17 +109,21 @@ export class ProdukEntity implements Produk {
   })
   tglSelesaiDiskon: Date | null;
 
-  /**
-   * @description
-   * The ID of the package.
-   */
-  @ApiProperty({
-    description: 'The ID of the package.',
-    example: 'tz4a98xxat96iws9zmbrgj3a',
-  })
+  @Exclude()
   paketId: string;
 
-  constructor(partial: Partial<ProdukEntity>) {
+  /**
+   * @description
+   * The package of the product.
+   */
+  @ApiProperty({
+    description: 'The package of the product.',
+    type: () => PaketEntity,
+  })
+  @Transform(({ value }) => value ? new PaketEntity(value) : null)
+  paket: PaketEntity;
+
+  constructor(partial: Partial<Produk>) {
     Object.assign(this, partial);
   }
 

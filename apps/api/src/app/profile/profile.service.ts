@@ -3,7 +3,6 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfileEntity } from './entities/profile.entity';
 import { PrismaService } from '../../services/prisma.service';
-import { OrderBy } from './dto/request-profile.dto';
 import { ResponseProfileEntity } from './entities/response-profile.entity';
 import { PaginationService } from '../../services/pagination.service';
 
@@ -49,11 +48,7 @@ export class ProfileService {
           orderDirection = filter['orderDirection'];
         }
 
-        if (filter['orderBy'] in OrderBy) {  // Check if filter is valid
-          query['orderBy'] = { [filter['orderBy']]: { name: orderDirection } };
-        } else {
-          query['orderBy'] = { [filter['orderBy']]: orderDirection };
-        }
+        query['orderBy'] = { [filter['orderBy']]: orderDirection };
 
       } else {
         query['orderBy'] = { createdAt: 'desc' };

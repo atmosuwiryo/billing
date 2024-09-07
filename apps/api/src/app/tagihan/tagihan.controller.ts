@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TagihanService } from './tagihan.service';
 import { CreateTagihanDto } from './dto/create-tagihan.dto';
 import { UpdateTagihanDto } from './dto/update-tagihan.dto';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { TagihanEntity } from './entities/tagihan.entity';
+import { RequestTagihanDto } from './dto/request-tagihan.dto';
+import { ResponseTagihanEntity } from './entities/response-tagihan.entity';
 
 @ApiTags('tagihan')
 @Controller('tagihan')
@@ -37,11 +40,12 @@ export class TagihanController {
   })
   @ApiOkResponse({
     description: 'Successfully retrieved list of bills.',
-    type: [TagihanEntity], // Indicates an array of TagihanEntity
+    type: ResponseTagihanEntity,
   })
   @Get()
-  findAll() {
-    return this.tagihanService.findAll();
+  findAll(@Query() query?: RequestTagihanDto) {
+    const { page, take, ...filter } = query;
+    return this.tagihanService.findAll(page, take, filter);
   }
 
   @ApiOperation({

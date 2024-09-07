@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../../services/prisma.service';
 import { PaginationService } from '../../services/pagination.service';
 import { UserEntity } from './entities/user.entity';
-import { OrderBy } from './dto/request-user.dto';
 import { ResponseUserEntity } from './entities/response-user.entity';
 
 @Injectable()
@@ -47,11 +46,7 @@ export class UserService {
           orderDirection = filter['orderDirection'];
         }
 
-        if (filter['orderBy'] in OrderBy) {  // Check if filter is valid
-          query['orderBy'] = { [filter['orderBy']]: { name: orderDirection } };
-        } else {
-          query['orderBy'] = { [filter['orderBy']]: orderDirection };
-        }
+        query['orderBy'] = { [filter['orderBy']]: orderDirection };
 
       } else {
         query['orderBy'] = { createdAt: 'desc' };

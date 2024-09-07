@@ -3,7 +3,6 @@ import { CreatePaketDto } from './dto/create-paket.dto';
 import { UpdatePaketDto } from './dto/update-paket.dto';
 import { PrismaService } from '../../services/prisma.service';
 import { PaketEntity } from './entities/paket.entity';
-import { OrderBy } from './dto/request-paket.dto';
 import { ResponsePaketEntity } from './entities/response-paket.entity';
 import { PaginationService } from '../../services/pagination.service';
 
@@ -45,11 +44,7 @@ export class PaketService {
           orderDirection = filter['orderDirection'];
         }
 
-        if (filter['orderBy'] in OrderBy) {  // Check if filter is valid
-          query['orderBy'] = { [filter['orderBy']]: { name: orderDirection } };
-        } else {
-          query['orderBy'] = { [filter['orderBy']]: orderDirection };
-        }
+        query['orderBy'] = { [filter['orderBy']]: orderDirection };
 
       } else {
         query['orderBy'] = { createdAt: 'desc' };

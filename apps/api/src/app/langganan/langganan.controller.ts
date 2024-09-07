@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { LanggananService } from './langganan.service';
 import { CreateLanggananDto } from './dto/create-langganan.dto';
 import { UpdateLanggananDto } from './dto/update-langganan.dto';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { LanggananEntity } from './entities/langganan.entity';
+import { RequestLanggananDto } from './dto/request-langganan.dto';
+import { ResponseLanggananEntity } from './entities/response-langganan.entity';
 
 @ApiTags('langganan')
 @Controller('langganan')
@@ -37,11 +40,12 @@ export class LanggananController {
   })
   @ApiOkResponse({
     description: 'Successfully retrieved list of subscriptions.',
-    type: [LanggananEntity], // Indicates an array of LanggananEntity
+    type: ResponseLanggananEntity,
   })
   @Get()
-  findAll() {
-    return this.langgananService.findAll();
+  findAll(@Query() query?: RequestLanggananDto) {
+    const { page, take, ...filter } = query;
+    return this.langgananService.findAll(page, take, filter);
   }
 
   @ApiOperation({
